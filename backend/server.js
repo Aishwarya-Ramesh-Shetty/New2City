@@ -1,0 +1,30 @@
+const express = require('express')
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+const cors = require('cors')
+const morgan = require('morgan')
+
+dotenv.config()
+
+const app = express()
+
+app.use(express.json())
+app.use(cors({origin: "http://localhost:5173"}))
+app.use(morgan('dev'))
+
+app.get('/api',(req,res)=>{
+    res.json({ message: "API running " })
+})
+
+const PORT = process.env.PORT || 5000;
+mongoose
+.connect(process.env.MONGO_URI,{ dbName: "city-explorer" })
+.then(()=>{
+    console.log("Mongodb connected")
+    app.listen(PORT,()=>{
+        console.log(`Server running on PORT ${PORT}`)
+    })
+})
+.catch((err)=>{
+    console.error("Mongodb error",err)
+})
