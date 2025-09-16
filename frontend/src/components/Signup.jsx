@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import {Link} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Signup = () => {
     const [name,setName] = useState("")
     const [email,setEmail]= useState("")
     const [password,setPassword] = useState("")
     
-
+    const navigate = useNavigate();
     const handleSubmit = async(e) =>{
         e.preventDefault();
         try{
@@ -21,7 +22,8 @@ const Signup = () => {
                 alert("Signup failed in frontend" || data.message)
             }
 
-            alert("Signup successful")
+            console.log("Signup successful")
+            navigate('/dashboard')
         }
         catch(err){
             console.error("Signup error in frontend: ",err)

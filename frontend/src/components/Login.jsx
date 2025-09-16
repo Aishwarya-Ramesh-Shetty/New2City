@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import {Link} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const [email,setEmail]= useState("")
     const [password,setPassword] = useState("")
-    
+    const navigate = useNavigate();
 
     const handleSubmit = async(e) =>{
         e.preventDefault();
@@ -17,14 +18,15 @@ const Login = () => {
 
             const data = await res.json()
             if(!res.ok){
-                alert("Login failed in frontend" || data.message)
+                console.log("Login failed in frontend" || data.message)
             }
 
-            alert("Login successful")
+            console.log("Login successful")
+            navigate('/dashboard')
         }
         catch(err){
             console.error("Login error in frontend: ",err)
-            alert("Login failed in frontend catch ")
+            console.log("Login failed in frontend catch ")
         }
     }
   return (
