@@ -35,4 +35,35 @@ const userRegister = async (req, res) => {
 }
 
 
-module.exports = { userRegister };
+const userLogin = async(req,res)=>{
+    const {email,password} = req.body;
+
+    if(!email || !password){
+        return res.status(400).json({message:"Email or Password required"});
+    }
+
+    const user = await User.findOne({email});
+    if(!user){
+        return res.status(400).json({message:"User does not exists"});
+    }
+
+    const isMatch =await bcrypt.compare(password,user.password);
+    if(!isMatch){
+        return res.status(400).json({message:"Incorrect Password"});
+    }
+
+    const token = jwt.sign(
+        {id:user._id},
+        process.env.JWT_SECRET,
+        {expiresIn:'7d'}
+    )
+
+    return res.status(200).json({
+        id:user._id,
+        name:user.name,
+        email:user.email,
+        token
+    })
+}
+
+module.exports = { userRegister,userLogin };
